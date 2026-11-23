@@ -10,11 +10,43 @@ dependencies = [
     "psycopg[binary]>=3.3.9",
 ]
 
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E4",   # Import and syntax-related errors
+    "E7",
+    "E9",
+    "F",    # Pyflakes
+    "I",    # Import sorting
+    "B",    # Bugbear
+    "UP",   # Python modernization
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py"]
+testpaths = ["tests", "apps"]
+addopts = "-ra"
+
+[tool.mypy]
+python_version = "3.14"
+plugins = ["mypy_django_plugin.main"]
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
+
 [dependency-groups]
 dev = [
     "django-stubs>=6.1.2",
     "djangorestframework-stubs>=3.18.2",
     "mypy>=2.4.1",
+    "pre-commit>=4.7.0",
     "pytest>=9.2.0",
     "pytest-django>=4.14.0",
     "ruff>=0.17.6",

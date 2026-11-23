@@ -1,0 +1,39 @@
+repos:
+  - repo: local
+    hooks:
+      # Backend
+      - id: backend-lint
+        name: Backend Ruff lint
+        entry: make lint
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
+
+      - id: backend-format
+        name: Backend Ruff format
+        entry: make format-check
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
+
+      - id: backend-typecheck
+        name: Backend mypy
+        entry: make typecheck
+        language: system
+        files: ^backend/.*\.py$
+        pass_filenames: false
+
+      # Frontend
+      - id: frontend-lint
+        name: Frontend ESLint
+        entry: make frontend-lint
+        language: system
+        files: ^frontend/.*\.(ts|tsx|js|jsx)$
+        pass_filenames: false
+
+      - id: frontend-typecheck
+        name: Frontend TypeScript
+        entry: make frontend-typecheck
+        language: system
+        files: ^frontend/.*\.(ts|tsx)$
+        pass_filenames: false
