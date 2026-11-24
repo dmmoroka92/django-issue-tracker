@@ -4,6 +4,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import { LoginPage, SignUpPage } from "../features/auth";
 import { AppLayout } from "../layouts/AppLayout";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
+import { ProtectedRoute } from "./guards/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -14,11 +15,17 @@ export const router = createBrowserRouter([
     ]
   },
   {
-    element: <AppLayout />,
+
+    element: <ProtectedRoute />,
     children: [
       {
-        path: "/",
-        element: <DashboardPage />,
+        element: <AppLayout />,
+        children: [
+          {
+            path: "/",
+            element: <DashboardPage />,
+          }
+        ]
       }
     ]
   },
