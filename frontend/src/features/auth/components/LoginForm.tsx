@@ -7,9 +7,13 @@ import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { APP_ROUTES } from "../../../app/routes"
 import { getApiErrorMessage } from "../../../shared/api/errors"
+import { useAppStore } from "../../../app/store"
 
 const LoginForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
+  const setAccessToken = useAppStore((state) => state.auth.setAccessToken)
+
   const {
     register,
     handleSubmit,
@@ -35,8 +39,8 @@ const LoginForm = () => {
   const onSubmit = (formData: LoginPayload) => {
     loginUser(formData, {
       onSuccess: (response) => {
-        console.log("login response", response)
-
+        setAccessToken(response.data.access)
+        
         toast.success(
           response.message || "Login successful!"
         )

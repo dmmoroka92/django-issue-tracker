@@ -7,9 +7,8 @@ export type User = {
   lastName: string;
 };
 
-export type SignUpResponse = ApiResponse<User>;
-
 export type LoginResponse = ApiResponse<{
   access: string;
-  refresh: string;
 }>;
+
+export type SignUpResponse = ApiResponse<User>;
