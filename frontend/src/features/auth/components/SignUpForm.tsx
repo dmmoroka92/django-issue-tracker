@@ -34,7 +34,7 @@ const SignUpForm = () => {
           response.message || "Account created successfully!"
         );
   
-        navigate(APP_ROUTES.LOGIN);
+        navigate(APP_ROUTES.AUTH.LOGIN);
       },
   
       onError: (error) => {

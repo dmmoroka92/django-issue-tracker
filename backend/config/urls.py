@@ -5,7 +5,6 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 from rest_framework_simplejwt.views import (
-    TokenBlacklistView,
     TokenRefreshView,
 )
 
@@ -22,6 +21,5 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("api/auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/auth/logout/", TokenBlacklistView.as_view(), name="token_blacklist"),
     path("api/auth/", include("accounts.urls")),
 ]

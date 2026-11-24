@@ -5,6 +5,7 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
+  fullName: string;
 };
 
 export type LoginResponse = ApiResponse<{

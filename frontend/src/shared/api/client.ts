@@ -7,14 +7,29 @@ import axios, {
 
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
+import { useAppStore } from "../../app/store";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
+  withCredentials: true,
+  withXSRFToken: true,
+  xsrfCookieName: "csrftoken",
+  xsrfHeaderName: "X-CSRFToken",
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+apiClient.interceptors.request.use((config) => {
+  const accessToken = useAppStore.getState().auth.accessToken 
+  
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
+  }
+
+  return config
+})
 
 // Request interceptor
 apiClient.interceptors.request.use(

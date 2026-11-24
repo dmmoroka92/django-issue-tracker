@@ -1,5 +1,7 @@
 export const APP_ROUTES = {
-  LOGIN: "/login",
-  SIGNUP: "/signup",
+  AUTH: {
+    LOGIN: "/login",
+    SIGNUP: "/signup",
+  },
   DASHBOARD: "/",
 } as const;

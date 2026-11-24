@@ -1,8 +1,15 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from accounts.serializers.user import UserSerializer
 
 from .serializers.registration import RegistrationSerializer
 
@@ -59,6 +66,50 @@ class LoginView(TokenObtainPairView):
             secure=False,
             samesite="Lax",
             path="/api/auth/",
+        )
+
+        return response
+
+
+class MeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        serializer = UserSerializer(request.user)
+
+        return Response(
+            {
+                "data": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class LogoutView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get("refresh_token")
+
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except TokenError:
+                # Token is already unusable.
+                pass
+
+        response = Response(
+            {"message": "Logged out successfully"},
+            status=status.HTTP_200_OK,
+        )
+
+        response.delete_cookie(
+            key="refresh_token",
+            path="/api/auth/",
+            samesite="Lax",
         )
 
         return response
