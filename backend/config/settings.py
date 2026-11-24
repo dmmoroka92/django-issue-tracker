@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
     "drf_spectacular",
+    "django_extensions",
     "rest_framework_simplejwt.token_blacklist",
     "accounts",
 ]
@@ -49,6 +51,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -56,6 +59,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 
 ROOT_URLCONF = "config.urls"
 
@@ -123,6 +131,10 @@ AUTH_PASSWORD_VALIDATORS = [
         "OPTIONS": {
             "min_length": 8,
         },
+    },
+    {
+        "NAME": "accounts.validators.MaximumPasswordLengthValidator",
+        "OPTIONS": {"max_length": 128},
     },
     {
         "NAME": "accounts.validators.PasswordComplexityValidator",

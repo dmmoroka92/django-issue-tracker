@@ -28,3 +28,18 @@ class PasswordComplexityValidator:
             "Password must contain uppercase and lowercase letters "
             "and at least one special character."
         )
+
+
+class MaximumPasswordLengthValidator:
+    def __init__(self, max_length: int = 128):
+        self.max_length = max_length
+
+    def validate(self, password: str, user=None) -> None:
+        if len(password) > self.max_length:
+            raise ValidationError(
+                f"Password must not exceed {self.max_length} characters.",
+                code="password_too_long",
+            )
+
+    def get_help_text(self) -> str:
+        return f"Password must not exceed {self.max_length} characters."
