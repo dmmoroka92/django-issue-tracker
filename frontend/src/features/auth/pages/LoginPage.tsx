@@ -1,6 +1,6 @@
 
 import { Link } from "react-router";
-// import { LoginForm } from "../components/LoginForm";
+import LoginForm from "../components/LoginForm";
 
 export const LoginPage = () => {
   return (
@@ -15,7 +15,7 @@ export const LoginPage = () => {
         </p>
       </div>
 
-      {/* <LoginForm /> */}
+      <LoginForm />
 
       <p className="mt-7 text-center text-sm text-slate-500">
         Don't have an account?{" "}
