@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "../../../shared/lib/utils";
-import { signUpSchema, type SignUpData } from "../schemas/signUp.schema";
+import { signUpSchema, type SignUpPayload } from "../schemas/signUp.schema";
 import { useRegistration } from "../hooks/useRegistration";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm<SignUpData>({
+  } = useForm<SignUpPayload>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       firstName: "",
@@ -27,7 +27,7 @@ const SignUpForm = () => {
 
   const { mutate: registerUser } = useRegistration()
   
-  const onSubmit = (formData: SignUpData) => {
+  const onSubmit = (formData: SignUpPayload) => {
     registerUser(formData, {
       onSuccess: (response) => {
         toast.success(
