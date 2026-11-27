@@ -19,3 +19,9 @@ export type ProjectsResponse = {
   archivedTotal: number
   total: number
 }
+
+export type ProjectAction =
+  | "archive"
+  | "restore"
+  
+export type ProjectActionHandler = () => void

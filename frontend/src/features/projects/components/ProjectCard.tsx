@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { ChevronRight, Folder } from "lucide-react"
 
-import type { Project } from "../types"
+import type { Project, ProjectAction, ProjectActionHandler } from "../types"
 import { ProjectActions } from "./ProjectActions"
 import { formatDate } from "../../../shared/utils/formatDate"
 import { cn } from "../../../shared/lib/utils"
+import { useProjectArchive } from "../hooks/useProjectArchivate"
 
 type ProjectCardProps = {
   project: Project
@@ -21,9 +22,17 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
-  const handleAction = (action: string, projectId: string) => {
-    console.log(action, projectId)
+  const { mutate: archiveProject } = useProjectArchive()
+  
+  const actionHandlers: Record<ProjectAction, ProjectActionHandler> = {
+    archive: () => archiveProject(project.id),
+    restore: () => console.log("restring project")
+  }
+  
+  const handleAction = (action: ProjectAction) => {
     setOpenMenuId(null)
+  
+    actionHandlers[action]()
   }
 
   return (

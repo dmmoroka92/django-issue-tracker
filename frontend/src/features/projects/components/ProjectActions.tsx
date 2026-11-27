@@ -13,7 +13,7 @@ type ProjectActionsProps = {
   project: Project
   openMenuId: string | null
   setOpenMenuId: (id: string | null) => void
-  handleAction: (action: string, projectId: string) => void
+  handleAction: (action: string) => void
 }
 
 export const ProjectActions = ({
@@ -23,7 +23,7 @@ export const ProjectActions = ({
   handleAction
 }: ProjectActionsProps) => {
   const isArchived = project.status === "archived"
-  
+
   return (
     <div className="relative">
       <button
@@ -45,7 +45,7 @@ export const ProjectActions = ({
         <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg">
           <button
             onClick={() =>
-              handleAction("View", project.id)
+              handleAction("view")
             }
             className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
           >
@@ -55,7 +55,7 @@ export const ProjectActions = ({
 
           <button
             onClick={() =>
-              handleAction("Edit", project.id)
+              handleAction("edit")
             }
             className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
           >
@@ -64,12 +64,12 @@ export const ProjectActions = ({
           </button>
 
           <button
-            onClick={() =>
+            onClick={() => {
               handleAction(
-                isArchived ? "Restore" : "Archive",
-                project.id
+                isArchived ? "restore" : "archive"
               )
             }
+          }
             className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
           >
             {isArchived ? (
@@ -87,7 +87,7 @@ export const ProjectActions = ({
 
           <button
             onClick={() =>
-              handleAction("Delete", project.id)
+              handleAction("delete")
             }
             className={cn(
               "flex w-full items-center gap-2 rounded-md px-3 py-2",
