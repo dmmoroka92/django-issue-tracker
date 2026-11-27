@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query"
 import type { SignUpPayload } from "../schemas/signUp.schema"
 import type { SignUpResponse } from "../types/auth.types"
-import { API_ENDPOINTS } from "../api/endpoints"
+import { AUTH_ENDPOINTS } from "../api/endpoints"
 import { apiClient } from "../../../shared/api/client"
 
 export const useRegistration = () => {
   return useMutation({
     mutationFn: async (payload: SignUpPayload): Promise<SignUpResponse> => {
       const response = await apiClient.post<SignUpResponse>(
-        API_ENDPOINTS.AUTH.SIGN_UP,
+        AUTH_ENDPOINTS.AUTH.SIGN_UP,
         payload
       )
 

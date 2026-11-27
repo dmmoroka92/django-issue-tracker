@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { apiClient } from "../../../shared/api/client";
-import { API_ENDPOINTS } from "../api/endpoints";
+import { AUTH_ENDPOINTS } from "../api/endpoints";
 import { getApiErrorMessage } from "../../../shared/api/errors";
 import { useNavigate } from "react-router";
 import { useAppStore } from "../../../app/store";
@@ -18,7 +18,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: async () => {
       const response = await apiClient.post(
-        API_ENDPOINTS.AUTH.LOGOUT,
+        AUTH_ENDPOINTS.AUTH.LOGOUT,
       );
 
       return response.data;

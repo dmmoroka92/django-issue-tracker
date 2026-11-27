@@ -4,4 +4,6 @@ export const APP_ROUTES = {
     SIGNUP: "/signup",
   },
   DASHBOARD: "/",
+  PROJECTS: "/projects",
+  PROJECT_DETAILS: (projectId: string) => `/projects/${projectId}`,
 } as const;
