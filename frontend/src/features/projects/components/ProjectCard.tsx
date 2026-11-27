@@ -6,6 +6,7 @@ import { ProjectActions } from "./ProjectActions"
 import { formatDate } from "../../../shared/utils/formatDate"
 import { cn } from "../../../shared/lib/utils"
 import { useProjectArchive } from "../hooks/useProjectArchivate"
+import { useProjectRestore } from "../hooks/useProjectRestore"
 
 type ProjectCardProps = {
   project: Project
@@ -23,10 +24,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   const { mutate: archiveProject } = useProjectArchive()
+  const { mutate: restoreProject } = useProjectRestore()
   
   const actionHandlers: Record<ProjectAction, ProjectActionHandler> = {
     archive: () => archiveProject(project.id),
-    restore: () => console.log("restring project")
+    restore: () => restoreProject(project.id)
   }
   
   const handleAction = (action: ProjectAction) => {

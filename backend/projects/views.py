@@ -53,3 +53,20 @@ class ProjectArchiveView(GenericAPIView):
                 "data": self.get_serializer(project).data,
             }
         )
+
+
+class ProjectRestoreView(GenericAPIView):
+    queryset = Project.objects.select_related("created_by")
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project = self.get_object()
+        project.restore()
+
+        return Response(
+            {
+                "message": "Project restored successfully",
+                "data": self.get_serializer(project).data,
+            }
+        )
