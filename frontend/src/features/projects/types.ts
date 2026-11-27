@@ -25,6 +25,7 @@ export type ProjectAction =
   | "archive"
   | "restore"
   | "edit"
+  | "delete"
   
 export type ProjectActionHandler = () => void
 

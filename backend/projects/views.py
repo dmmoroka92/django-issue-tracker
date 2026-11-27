@@ -1,8 +1,9 @@
 from django.db.models import Count, Q
+from rest_framework import status
 from rest_framework.generics import (
     GenericAPIView,
     ListCreateAPIView,
-    RetrieveUpdateAPIView,
+    RetrieveUpdateDestroyAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -76,7 +77,26 @@ class ProjectRestoreView(GenericAPIView):
         )
 
 
-class ProjectDetailView(RetrieveUpdateAPIView):
+class ProjectDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.select_related("created_by")
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        return Response(
+            {
+                "message": "Project updated successfully",
+                "data": response.data,
+            }
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        project = self.get_object()
+        self.perform_destroy(project)
+
+        return Response(
+            {"message": "Project deleted successfully"},
+            status=status.HTTP_200_OK,
+        )

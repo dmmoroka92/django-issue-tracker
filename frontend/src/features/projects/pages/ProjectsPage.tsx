@@ -11,6 +11,8 @@ import { Modal } from "../../../shared/components/Modal";
 import { useState } from "react";
 import { ProjectForm } from "../components/ProjectForm";
 import type { Project } from "../types";
+import { useProjectDelete } from "../hooks/useProjectDelete";
+import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
 
 export const ProjectsPage = () => {
   const {
@@ -21,11 +23,17 @@ export const ProjectsPage = () => {
   } = useProjects()
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
 
   const projects = data?.projects ?? [];
   const projectsTotal = data?.total ?? 0;
   const activeTotal = data?.activeTotal ?? 0
   const archivedTotal = data?.archivedTotal ?? 0
+
+  const {
+    mutate: deleteProject,
+    isPending: isDeleting
+  } = useProjectDelete()
 
   const handleCreateProject = () => {
     setSelectedProject(null)
@@ -40,6 +48,22 @@ export const ProjectsPage = () => {
   const handleCloseModal = () => {
     setSelectedProject(null)
     setIsProjectModalOpen(false)
+  }
+
+  const handleDeleteProject = (project: Project) => {
+    setProjectToDelete(project)
+  }
+  
+  const closeDeleteModal = () => {
+    setProjectToDelete(null)
+  }
+  
+  const confirmDeleteProject = () => {
+    if (!projectToDelete || isDeleting) return
+  
+    deleteProject(projectToDelete.id, {
+      onSuccess: closeDeleteModal,
+    })
   }
 
   return (
@@ -90,6 +114,7 @@ export const ProjectsPage = () => {
                 key={project.id}
                 project={project}
                 onEdit={handleEditProject}
+                onDelete={handleDeleteProject}
               />
             })}
           </div>
@@ -103,7 +128,7 @@ export const ProjectsPage = () => {
       )}
 
       <Modal
-        isOpen={isProjectModalOpen}
+      isOpen={isProjectModalOpen}
         title={selectedProject ? "Edit Project" : "New Project"}
         description={
           selectedProject
@@ -120,6 +145,16 @@ export const ProjectsPage = () => {
           onClose={handleCloseModal}
         />
       </Modal>
+
+      <ConfirmationModal
+        isOpen={Boolean(projectToDelete)}
+        title="Delete project"
+        description={`Are you sure you want to delete "${projectToDelete?.name ?? ""}"? This action cannot be undone.`}
+        confirmLabel="Delete project"
+        isPending={isDeleting}
+        onConfirm={confirmDeleteProject}
+        onClose={closeDeleteModal}
+      />
     </div>
   )
 }

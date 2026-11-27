@@ -9,11 +9,16 @@ import { useProjectArchive } from "../hooks/useProjectArchivate"
 import { useProjectRestore } from "../hooks/useProjectRestore"
 
 type ProjectCardProps = {
-  project: Project,
+  project: Project
   onEdit: (project: Project) => void
+  onDelete: (project: Project) => void
 }
 
-export const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
+export const ProjectCard = ({
+  project,
+  onEdit,
+  onDelete
+}: ProjectCardProps) => {
   const isArchived = project.status === "archived"
 
   const authorName =
@@ -30,7 +35,8 @@ export const ProjectCard = ({ project, onEdit }: ProjectCardProps) => {
   const actionHandlers: Record<ProjectAction, ProjectActionHandler> = {
     archive: () => archiveProject(project.id),
     restore: () => restoreProject(project.id),
-    edit: () => onEdit(project)
+    edit: () => onEdit(project),
+    delete: () => onDelete(project)
   }
   
   const handleAction = (action: ProjectAction) => {
