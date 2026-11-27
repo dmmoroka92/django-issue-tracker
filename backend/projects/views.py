@@ -8,6 +8,8 @@ from rest_framework.generics import (
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from common.pagination import ApiPageNumberPagination
+
 from .models import Project
 from .serializers import ProjectSerializer
 
@@ -16,6 +18,7 @@ class ProjectListCreateView(ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = ApiPageNumberPagination
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
@@ -35,7 +38,11 @@ class ProjectListCreateView(ListCreateAPIView):
 
         return Response(
             {
-                "data": {"projects": response.data, **stats},
+                "data": {
+                    "projects": response.data["results"],
+                    "pagination": response.data["pagination"],
+                    **stats,
+                },
             }
         )
 

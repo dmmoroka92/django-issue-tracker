@@ -13,14 +13,17 @@ import { ProjectForm } from "../components/ProjectForm";
 import type { Project } from "../types";
 import { useProjectDelete } from "../hooks/useProjectDelete";
 import { ConfirmationModal } from "../../../shared/components/ConfirmationModal";
+import { Pagination } from "../../../shared/components/Pagination";
 
 export const ProjectsPage = () => {
+  const [page, setPage] = useState<number>(1)
   const {
     data,
     isPending,
     isError,
+    isPlaceholderData,
     refetch,
-  } = useProjects()
+  } = useProjects(page)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null)
@@ -118,6 +121,15 @@ export const ProjectsPage = () => {
               />
             })}
           </div>
+
+          {data?.pagination && (
+            <Pagination
+              pagination={data.pagination}
+              total={data.total}
+              onPageChange={setPage}
+              disabled={isPlaceholderData}
+            />
+          )}
 
           {projects.length > 0 && (
             <p className="text-sm text-slate-400">

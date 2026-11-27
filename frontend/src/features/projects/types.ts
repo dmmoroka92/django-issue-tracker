@@ -1,3 +1,4 @@
+import type { PaginationMeta } from "../../shared/api/types"
 import type { User } from "../auth/types/auth.types"
 import type { ProjectPayload } from "./schemas/project.schema"
 
@@ -19,6 +20,7 @@ export type ProjectsResponse = {
   activeTotal: number
   archivedTotal: number
   total: number
+  pagination: PaginationMeta
 }
 
 export type ProjectAction =
