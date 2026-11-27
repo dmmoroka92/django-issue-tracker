@@ -18,6 +18,8 @@ export const ProjectsPage = () => {
 
   const projects = data?.projects ?? [];
   const projectsTotal = data?.total ?? 0;
+  const activeTotal = data?.activeTotal ?? 0
+  const archivedTotal = data?.archivedTotal ?? 0
   
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -55,8 +57,8 @@ export const ProjectsPage = () => {
         <>
           <ProjectStats
             total={projectsTotal}
-            activeCount={999}
-            archivedCount={999}
+            activeCount={activeTotal}
+            archivedCount={archivedTotal}
           />
 
           {projects.length === 0 && <ProjectEmptyState />}

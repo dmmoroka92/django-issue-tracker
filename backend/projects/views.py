@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,13 +14,23 @@ class ProjectListCreateView(ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
+        queryset = self.get_queryset()
+
+        stats = queryset.aggregate(
+            total=Count("id"),
+            active_total=Count(
+                "id",
+                filter=Q(status=Project.Status.ACTIVE),
+            ),
+            archived_total=Count(
+                "id",
+                filter=Q(status=Project.Status.ARCHIVED),
+            ),
+        )
 
         return Response(
             {
-                "data": {
-                    "projects": response.data,
-                    "total": self.get_queryset().count(),
-                },
+                "data": {"projects": response.data, **stats},
             }
         )
 

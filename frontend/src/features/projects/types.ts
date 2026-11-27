@@ -15,5 +15,7 @@ export type Project = {
 
 export type ProjectsResponse = {
   projects: Project[]
+  activeTotal: number
+  archivedTotal: number
   total: number
 }
