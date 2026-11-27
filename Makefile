@@ -9,7 +9,7 @@ FRONTEND := $(DC) exec -T frontend
         install run shell dbshell \
         test lint format format-check typecheck check \
         frontend-lint frontend-typecheck frontend-check \
-        migrations migrate showmigrations superuser
+        migrations migrate showmigrations superuser show_urls
 
 # -----------------------------
 # Help
@@ -116,6 +116,9 @@ frontend-typecheck:
 	$(FRONTEND) npx tsc --noEmit
 
 frontend-check: frontend-lint frontend-typecheck
+
+show_urls:
+	$(BACKEND) uv run python manage.py show_urls
 
 # -----------------------------
 # Database

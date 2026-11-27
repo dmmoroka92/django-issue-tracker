@@ -5,6 +5,7 @@ import { LoginPage, SignUpPage } from "../features/auth";
 import { AppLayout } from "../layouts/AppLayout";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import { ProtectedRoute } from "./guards/ProtectedRoute";
+import { ProjectsPage } from "../features/projects/pages/ProjectsPage";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
           {
             path: "/",
             element: <DashboardPage />,
+          },
+          {
+            path: "/projects",
+            element: <ProjectsPage />
           }
         ]
       }
