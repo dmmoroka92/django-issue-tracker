@@ -7,6 +7,8 @@ import { formatDate } from "../../../shared/utils/formatDate"
 import { cn } from "../../../shared/lib/utils"
 import { useProjectArchive } from "../hooks/useProjectArchivate"
 import { useProjectRestore } from "../hooks/useProjectRestore"
+import { useNavigate } from "react-router"
+import { APP_ROUTES } from "../../../app/routes"
 
 type ProjectCardProps = {
   project: Project
@@ -19,6 +21,7 @@ export const ProjectCard = ({
   onEdit,
   onDelete
 }: ProjectCardProps) => {
+  const navigate = useNavigate()
   const isArchived = project.status === "archived"
 
   const authorName =
@@ -36,7 +39,8 @@ export const ProjectCard = ({
     archive: () => archiveProject(project.id),
     restore: () => restoreProject(project.id),
     edit: () => onEdit(project),
-    delete: () => onDelete(project)
+    delete: () => onDelete(project),
+    view: () => navigate(APP_ROUTES.PROJECT_DETAILS(project.id))
   }
   
   const handleAction = (action: ProjectAction) => {
@@ -188,7 +192,7 @@ export const ProjectCard = ({
 
         <button
           aria-label={`View ${project.name}`}
-          onClick={() => handleAction("View", project.id)}
+          onClick={() => handleAction("view")}
           className={cn(
             "ml-auto rounded-lg p-2",
             "text-slate-400",

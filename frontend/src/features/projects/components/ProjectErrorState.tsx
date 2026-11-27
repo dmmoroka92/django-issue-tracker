@@ -1,11 +1,9 @@
 import { AlertCircle, RefreshCw } from "lucide-react"
 
-import type { UseQueryResult } from "@tanstack/react-query";
-import type { ProjectsResponse } from "../types";
 import { cn } from "../../../shared/lib/utils";
 
 type ProjectErrorStateProps = {
-  refetch: UseQueryResult<ProjectsResponse, Error>["refetch"];
+  refetch: () => void
 }
 
 export const ProjectErrorState = ({ refetch }: ProjectErrorStateProps) => {

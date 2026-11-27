@@ -82,6 +82,15 @@ class ProjectDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+
+        return Response(
+            {
+                "data": response.data,
+            }
+        )
+
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
 

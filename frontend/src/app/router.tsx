@@ -6,6 +6,7 @@ import { AppLayout } from "../layouts/AppLayout";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import { ProtectedRoute } from "./guards/ProtectedRoute";
 import { ProjectsPage } from "../features/projects/pages/ProjectsPage";
+import { ProjectDetailsPage } from "../features/projects/pages/ProjectDetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
           {
             path: "/projects",
             element: <ProjectsPage />
+          },
+          {
+            path: "projects/:id",
+            element: <ProjectDetailsPage />
           }
         ]
       }
