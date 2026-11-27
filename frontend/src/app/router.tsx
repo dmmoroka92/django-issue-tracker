@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router";
 import { AuthLayout } from "../layouts/AuthLayout";
 import NotFoundPage from "../pages/NotFoundPage";
 import { LoginPage, SignUpPage } from "../features/auth";
-import { AppLayout } from "../layouts/AppLayout";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import { ProtectedRoute } from "./guards/ProtectedRoute";
 import { ProjectsPage } from "../features/projects/pages/ProjectsPage";
 import { ProjectDetailsPage } from "../features/projects/pages/ProjectDetailsPage";
+import { AppLayout } from "../layouts/AppLayout";
 
 export const router = createBrowserRouter([
   {
