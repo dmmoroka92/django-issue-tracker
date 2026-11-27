@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { FolderPlus, Plus } from "lucide-react";
 
 import { useProjects } from "../hooks/useProjects";
 import { ProjectErrorState } from "../components/ProjectErrorState";
@@ -7,6 +7,9 @@ import { ProjectEmptyState } from "../components/ProjectEmptyState";
 import { ProjectStats } from "../components/ProjectStats";
 import { ProjectCard } from "../components/ProjectCard";
 import { cn } from "../../../shared/lib/utils";
+import { Modal } from "../../../shared/components/Modal";
+import { useState } from "react";
+import { ProjectForm } from "../components/ProjectForm";
 
 export const ProjectsPage = () => {
   const {
@@ -15,16 +18,16 @@ export const ProjectsPage = () => {
     isError,
     refetch,
   } = useProjects()
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false)
 
   const projects = data?.projects ?? [];
   const projectsTotal = data?.total ?? 0;
   const activeTotal = data?.activeTotal ?? 0
   const archivedTotal = data?.archivedTotal ?? 0
-  
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
 
-      {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
@@ -37,7 +40,7 @@ export const ProjectsPage = () => {
         </div>
 
         <button
-          onClick={() => console.log("Create project")}
+          onClick={() => setIsProjectModalOpen(true)}
           className={cn(
             "flex items-center gap-2 rounded-lg bg-blue-600",
             "px-4 py-2.5 text-sm font-medium text-white",
@@ -77,6 +80,17 @@ export const ProjectsPage = () => {
           )}
         </>
       )}
+
+      <Modal
+        isOpen={isProjectModalOpen}
+        title="New Project"
+        description="Create a project to organize issues, tasks, and team collaboration."
+        icon={<FolderPlus size={22} />}
+        onClose={() => setIsProjectModalOpen(false)}
+        closeOnBackdrop={true}
+      >
+        <ProjectForm onClose={() => setIsProjectModalOpen(false)}/>
+      </Modal>
     </div>
   )
 }

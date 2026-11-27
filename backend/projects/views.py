@@ -1,5 +1,5 @@
 from django.db.models import Count, Q
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -36,3 +36,20 @@ class ProjectListCreateView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+
+class ProjectArchiveView(GenericAPIView):
+    queryset = Project.objects.select_related("created_by")
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project = self.get_object()
+        project.archive()
+
+        return Response(
+            {
+                "message": "Project archived successfully",
+                "data": self.get_serializer(project).data,
+            }
+        )
