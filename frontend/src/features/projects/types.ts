@@ -1,4 +1,5 @@
 import type { User } from "../auth/types/auth.types"
+import type { ProjectPayload } from "./schemas/project.schema"
 
 type ProjectStatus = "active" | "archived"
 
@@ -23,5 +24,11 @@ export type ProjectsResponse = {
 export type ProjectAction =
   | "archive"
   | "restore"
+  | "edit"
   
 export type ProjectActionHandler = () => void
+
+export type ProjectUpdatePayload = {
+  projectId: string
+  formData: ProjectPayload
+}

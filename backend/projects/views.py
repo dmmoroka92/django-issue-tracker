@@ -1,5 +1,9 @@
 from django.db.models import Count, Q
-from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from rest_framework.generics import (
+    GenericAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateAPIView,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -70,3 +74,9 @@ class ProjectRestoreView(GenericAPIView):
                 "data": self.get_serializer(project).data,
             }
         )
+
+
+class ProjectDetailView(RetrieveUpdateAPIView):
+    queryset = Project.objects.select_related("created_by")
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]

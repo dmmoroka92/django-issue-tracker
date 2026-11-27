@@ -3,34 +3,54 @@ import { projectSchema, type ProjectPayload } from "../schemas/project.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { cn } from "../../../shared/lib/utils"
 import { useProjectCreate } from "../hooks/useProjectCreate"
+import type { Project } from "../types"
+import { useProjectUpdate } from "../hooks/useProjectUpdate"
 
 type ProjectFormProps = {
+  project?: Project | null
   onClose: () => void
 }
 
-export const ProjectForm = ({ onClose }: ProjectFormProps) => {
+export const ProjectForm = ({ project, onClose }: ProjectFormProps) => {
   const {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors }
   } = useForm<ProjectPayload>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      name: "",
-      description: ""
+      name: project?.name ?? "",
+      description: project?.description ?? ""
     }
   })
 
-  const { mutate: createProject } = useProjectCreate()
+  const { 
+    mutate: createProject,
+    isPending: isCreating,
+  } = useProjectCreate()
+  
+  const {
+    mutate: updateProject,
+    isPending: isUpdating
+  } = useProjectUpdate()
+
+  const isPending = isCreating || isUpdating
 
   const onSubmit = (formData: ProjectPayload) => {
-    createProject(formData, {
-      onSuccess: () => {
-        reset()
-        onClose()
-      },
-    })
+    const onSuccess = () => {
+      reset()
+      onClose()
+    }
+  
+    if (project) {
+      updateProject(
+        { projectId: project.id, formData },
+        { onSuccess }
+      )
+    } else {
+      createProject(formData, { onSuccess })
+    }
   }
   
   const inputClass = cn(
@@ -105,14 +125,20 @@ export const ProjectForm = ({ onClose }: ProjectFormProps) => {
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isPending}
         className={cn(
           "mt-2 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm",
           "font-medium text-white transition hover:bg-indigo-700",
           "disabled:cursor-not-allowed disabled:opacity-50"
         )}
       >
-        {isSubmitting ? "Creating project..." : "Create project"}
+        {isPending
+          ? project
+            ? "Updating project..."
+            : "Creating project..."
+          : project
+            ? "Save changes"
+            : "Create project"}
       </button>
     </form>
   )

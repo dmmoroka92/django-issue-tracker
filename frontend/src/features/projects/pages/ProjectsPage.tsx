@@ -10,6 +10,7 @@ import { cn } from "../../../shared/lib/utils";
 import { Modal } from "../../../shared/components/Modal";
 import { useState } from "react";
 import { ProjectForm } from "../components/ProjectForm";
+import type { Project } from "../types";
 
 export const ProjectsPage = () => {
   const {
@@ -19,11 +20,27 @@ export const ProjectsPage = () => {
     refetch,
   } = useProjects()
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   const projects = data?.projects ?? [];
   const projectsTotal = data?.total ?? 0;
   const activeTotal = data?.activeTotal ?? 0
   const archivedTotal = data?.archivedTotal ?? 0
+
+  const handleCreateProject = () => {
+    setSelectedProject(null)
+    setIsProjectModalOpen(true)
+  }
+
+  const handleEditProject = (project: Project) => {
+    setSelectedProject(project)
+    setIsProjectModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedProject(null)
+    setIsProjectModalOpen(false)
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -40,7 +57,7 @@ export const ProjectsPage = () => {
         </div>
 
         <button
-          onClick={() => setIsProjectModalOpen(true)}
+          onClick={handleCreateProject}
           className={cn(
             "flex items-center gap-2 rounded-lg bg-blue-600",
             "px-4 py-2.5 text-sm font-medium text-white",
@@ -69,7 +86,11 @@ export const ProjectsPage = () => {
           <div className="space-y-4">
             {projects.map((project) => {
               
-              return <ProjectCard key={project.id} project={project} />
+              return <ProjectCard
+                key={project.id}
+                project={project}
+                onEdit={handleEditProject}
+              />
             })}
           </div>
 
@@ -83,13 +104,21 @@ export const ProjectsPage = () => {
 
       <Modal
         isOpen={isProjectModalOpen}
-        title="New Project"
-        description="Create a project to organize issues, tasks, and team collaboration."
+        title={selectedProject ? "Edit Project" : "New Project"}
+        description={
+          selectedProject
+            ? "Update your project details."
+            : "Add a new project to your workspace."
+        }
         icon={<FolderPlus size={22} />}
-        onClose={() => setIsProjectModalOpen(false)}
+        onClose={handleCloseModal}
         closeOnBackdrop={true}
       >
-        <ProjectForm onClose={() => setIsProjectModalOpen(false)}/>
+        <ProjectForm
+          key={selectedProject?.id ?? "create"}
+          project={selectedProject}
+          onClose={handleCloseModal}
+        />
       </Modal>
     </div>
   )
